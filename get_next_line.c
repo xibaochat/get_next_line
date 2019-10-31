@@ -1,21 +1,4 @@
-#include <stdio.h>
-#include <unistd.h>
-#include <string.h>
-#include <stdlib.h>
-#include <fcntl.h>
-
-int          ft_strlen(char *str)
-{
-	int  i;
-	int  lens;
-
-	i = -1;
-	lens = 0;
-	if (str)
-		while (str[++i])
-			lens++;
-	return (lens);
-}
+#include "get_next_line.h"
 
 int no_newline_in_str(char *str)
 {
@@ -50,8 +33,8 @@ char *get_content_fron_file(int fd, char *str)
 		if (!s)
 			return (NULL);
 		if (str)
-			s = strcat(s, str);
-		s = strncat(s, buff, nb_read);
+			s =ft_strcat(s, str);
+		s = ft_strncat(s, buff, nb_read);
 		if (no_newline_in_str(s))
 			return (get_content_fron_file(fd, s));
 		return (s);
@@ -70,7 +53,7 @@ char *extract_line(char *str)
 	if (!(s = (char *)malloc(sizeof(char) * (i + 1))))
 		return (NULL);
 	s[i] = '\0';
-	s = strncpy(s, str, i);
+	s = ft_strncpy(s, str, i);
 	return (s);
 }
 
@@ -101,6 +84,8 @@ int get_next_line(int fd, char **line)
 {
 	static char *str = NULL;
 
+	if (fd < 0 || BUFFER_SIZE <= 0 || line == NULL)
+		return (-1);
 	if (no_newline_in_str(str))
 		if (!(str = get_content_fron_file(fd, str)))
 			return (-1);
