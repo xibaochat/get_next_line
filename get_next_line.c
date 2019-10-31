@@ -4,8 +4,6 @@
 #include <stdlib.h>
 #include <fcntl.h>
 
-#define BUFFER_SIZE 3200
-
 int          ft_strlen(char *str)
 {
 	int  i;
@@ -113,21 +111,4 @@ int get_next_line(int fd, char **line)
 		return (0);
 	}
 	return (-1);
-}
-
-int main(int ac, char **av)
-{
-	(void)ac;
-	char *str = NULL;
-	int fd = open(av[1],O_RDONLY);
-	char *line;
-	int res;
-
-	line = NULL;
-	while ((res = get_next_line(fd, &line)) >= 0)
-	{
-		printf("%d %s\n", res, line);
-	}
-	return (0);
-
 }
