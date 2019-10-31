@@ -82,10 +82,14 @@ char *remove_str(char *str)
 
 	i = 0;
 	j = 0;
+	if (!str)
+		return (NULL);
 	while (str[i] && str[i] != '\n')
 		i++;
 	j = ft_strlen(str) - i;
 	s = (char *)malloc(sizeof(char) * j);
+	if (!s)
+		return (NULL);
 	s[--j] = '\0';
 	i = ft_strlen(str);
 	while (--j >= 0)
@@ -100,9 +104,15 @@ int get_next_line(int fd, char **line)
 	if (no_newline_in_str(str))
 		if (!(str = get_content_fron_file(fd, str)))
 			return (-1);
-	*line = extract_line(str) ;
+	*line = extract_line(str);
 	str = remove_str(str);
-	printf("%s\n", *line);
+	if (*line)
+	{
+		if (str[0])
+			return (1);
+		return (0);
+	}
+	return (-1);
 }
 
 int main(int ac, char **av)
@@ -111,8 +121,13 @@ int main(int ac, char **av)
 	char *str = NULL;
 	int fd = open(av[1],O_RDONLY);
 	char *line;
+	int res;
+
 	line = NULL;
-	get_next_line(fd, &line);
+	while ((res = get_next_line(fd, &line)) >= 0)
+	{
+		printf("%d %s\n", res, line);
+	}
 	return (0);
 
 }
