@@ -11,6 +11,7 @@ basic_tester () {
 		echo -e "\e[32mOK\e[39m"
 	else
 		echo  -e "\e[31mFAIL\e[39m"
+		exit
 	fi
 }
 
@@ -31,8 +32,15 @@ basic_test () {
 	basic_tester medium_plus_file
 	basic_tester one_new_line
 	basic_tester lot_of_new_line
+	basic_tester one_char_per_line
+	basic_tester one_char
+	basic_tester one_huge_line
 }
-# Basic tests
+
+
+#########
+# BASIC #
+#########
 print_test_type "BASICS"
 
 # 32
@@ -51,6 +59,9 @@ basic_test
 compile_test basic_tests.c 9999999
 basic_test
 
+#############
+# FEW LINES #
+#############
 
 
 # Clean

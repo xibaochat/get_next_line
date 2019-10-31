@@ -37,8 +37,10 @@ char *get_content_fron_file(int fd, char *str)
 {
 	int nb_read;
 	char *s;
-	char buff[BUFFER_SIZE + 1];
+	char *buff;
 
+	if (!(buff = (char *)malloc(BUFFER_SIZE + 1)))
+		return (NULL);
 	buff[BUFFER_SIZE] = '\0';
 	nb_read = read(fd, buff, BUFFER_SIZE);
 	buff[nb_read] = '\0';
