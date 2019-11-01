@@ -19,5 +19,6 @@ char*           ft_strcat(char *dest, char *src);
 char *ft_strncpy(char *dest, char *src, int n);
 void ft_putstr(char *str);
 char    *ft_strncat(char *dest, char *src, int n);
+char *ft_strnew(int size);
 
 #endif
