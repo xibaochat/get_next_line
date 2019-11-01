@@ -32,17 +32,19 @@ static int get_content_fron_file(int fd, t_gnl *fd_content)
 							nb_read + 1)))
 			return (0);
 		if (fd_content->content)
+		{
 			s = ft_strcat(s, fd_content->content);
+			free(fd_content->content);
+		}
 		s = ft_strcat(s, buff);
 		free(buff);
-		if (fd_content->content)
-			free(fd_content->content);
 		fd_content->content = s;
 		if (no_newline_in_str(fd_content->content))
 			return (get_content_fron_file(fd, fd_content));
 		return (1);
 	}
-	return (1);
+	free(buff);
+	return (0);
 }
 
 char *extract_line(char *str)
@@ -127,11 +129,18 @@ int get_next_line(int fd, char **line)
 	}
 	if (fd_content->reach_eof)
 		return (-1);
-
+\
 	// READ
 	if (no_newline_in_str(fd_content->content))
 		if (!(get_content_fron_file(fd, fd_content)))
 			return (-1);
+
+	// IN CASE OF EMPTY FILE
+	if (!fd_content->content)
+	{
+		*line = NULL;
+		return (0);
+	}
 
 	// EXTRACT
 	*line = extract_line(fd_content->content);

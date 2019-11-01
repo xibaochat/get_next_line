@@ -19,6 +19,11 @@ int main(int ac, char **av)
 		write(1, line, strlen(line));
 		if (res)
 			write(1, "\n", 1);
+		if (line)
+		{
+			free(line);
+			line = NULL;
+		}
 	}
 	return (0);
 
