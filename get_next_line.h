@@ -1,10 +1,17 @@
 #ifndef GET_NEXT_LINE_H
 # define GET_NEXT_LINE_H
 
-#include <stdlib.h>
-#include <fcntl.h>
-#include <unistd.h>
+# include <stdlib.h>
+# include <fcntl.h>
+# include <unistd.h>
 
+typedef struct s_gnl
+{
+	int fd;
+	char *content;
+	struct s_gnl *first;
+	struct s_gnl *next;
+}				t_gnl;
 
 char*	ft_strcat(char *dest, char *src);
 int            ft_strlen(char *str);

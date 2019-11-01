@@ -8,6 +8,19 @@ void	ft_putstr(char *str)
 		write(1, str, ft_strlen(str));
 }
 
+char *ft_strnew(int size)
+{
+	char *ptr;
+	int i;
+
+	if (!(ptr = (char *)malloc(sizeof(*ptr) * size)))
+		return (NULL);
+	i = 0;
+	while (i < size + 1)
+		ptr[i++] = 0;
+	return (ptr);
+}
+
 int		ft_strlen(char *str)
 {
 	int  i;
