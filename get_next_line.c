@@ -1,21 +1,5 @@
 #include "get_next_line.h"
 
-static int no_newline_in_str(char *str)
-{
-	int i;
-
-	i = 0;
-	if (!str)
-		return (1);
-	while (str[i])
-	{
-		if (str[i] == '\n')
-			return (0);
-		i++;
-	}
-	return (1);
-}
-
 static int get_content_fron_file(int fd, t_gnl *fd_content)
 {
 	int nb_read;
@@ -28,17 +12,15 @@ static int get_content_fron_file(int fd, t_gnl *fd_content)
 	if (nb_read)
 	{
 		buff[nb_read] = '\0';
-		if (!(s = ft_strnew(ft_strlen(fd_content->content) +	\
-							nb_read + 1)))
+		if (!(s = ft_strnew(ft_strlen(fd_content->content) + nb_read + 1)))
 			return (0);
 		if (fd_content->content)
 		{
 			s = ft_strcat(s, fd_content->content);
 			free(fd_content->content);
 		}
-		s = ft_strcat(s, buff);
+		fd_content->content = ft_strcat(s, buff);
 		free(buff);
-		fd_content->content = s;
 		if (no_newline_in_str(fd_content->content))
 			return (get_content_fron_file(fd, fd_content));
 		return (1);
@@ -69,11 +51,8 @@ static int remove_str(t_gnl *fd_content)
 
 	i = 0;
 	j = 0;
-	if (!(fd_content->content))
-		return (0);
 	while (fd_content->content[i] && fd_content->content[i] != '\n')
 		i++;
-
 	if (!(fd_content->content[i]))
 	{
 		fd_content->reach_eof = 1;
@@ -82,8 +61,7 @@ static int remove_str(t_gnl *fd_content)
 		return (1);
 	}
 	j = ft_strlen(fd_content->content) - i;
-	s = ft_strnew(j);
-	if (s)
+	if ((s = ft_strnew(j)))
 	{
 		s = ft_strcat(s, fd_content->content + i + 1);
 		if (fd_content->content)
@@ -129,7 +107,7 @@ int get_next_line(int fd, char **line)
 	}
 	if (fd_content->reach_eof)
 		return (-1);
-\
+
 	// READ
 	if (no_newline_in_str(fd_content->content))
 		if (!(get_content_fron_file(fd, fd_content)))

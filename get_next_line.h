@@ -14,12 +14,10 @@ typedef struct s_gnl
 	struct s_gnl *next;
 }				t_gnl;
 
-char*	ft_strcat(char *dest, char *src);
 int            ft_strlen(char *str);
 char*           ft_strcat(char *dest, char *src);
 char *ft_strncpy(char *dest, char *src, int n);
-void ft_putstr(char *str);
-char    *ft_strncat(char *dest, char *src, int n);
 char *ft_strnew(int size);
+int no_newline_in_str(char *str);
 
 #endif

@@ -1,11 +1,19 @@
 #include "get_next_line.h"
 
-void	ft_putstr(char *str)
+int no_newline_in_str(char *str)
 {
+	int i;
+
+	i = 0;
 	if (!str)
-		write(1,"no\n", 3);
-	else
-		write(1, str, ft_strlen(str));
+		return (1);
+	while (str[i])
+	{
+		if (str[i] == '\n')
+			return (0);
+		i++;
+	}
+	return (1);
 }
 
 char *ft_strnew(int size)
