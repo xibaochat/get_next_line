@@ -9,6 +9,7 @@ typedef struct s_gnl
 {
 	int fd;
 	char *content;
+	int reach_eof;
 	struct s_gnl *first;
 	struct s_gnl *next;
 }				t_gnl;

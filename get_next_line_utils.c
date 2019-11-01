@@ -13,10 +13,10 @@ char *ft_strnew(int size)
 	char *ptr;
 	int i;
 
-	if (!(ptr = (char *)malloc(sizeof(*ptr) * size)))
+	if (!(ptr = (char *)malloc(size)))
 		return (NULL);
 	i = 0;
-	while (i < size + 1)
+	while (i < size)
 		ptr[i++] = 0;
 	return (ptr);
 }
@@ -33,19 +33,6 @@ int		ft_strlen(char *str)
 			lens++;
 	return (lens);
 }
-
-char	*ft_strncat(char *dest, char *src, int n)
-{
-	 unsigned int lens;
-	 unsigned int i;
-
-	 i = 0;
-	 lens = ft_strlen(dest);
-	 while (src[i] && i < n)
-		 dest[lens++] = src[i++];
-	 dest[lens] = '\0';
-	 return (dest);
- }
 
 char	*ft_strncpy(char *dest, char *src, int n)
 {

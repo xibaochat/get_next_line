@@ -2,6 +2,7 @@
 #include <unistd.h>
 #include <fcntl.h>
 #include <stdlib.h>
+#include <string.h>
 
 int get_next_line(int fd, char **line);
 
@@ -13,9 +14,12 @@ int main(int ac, char **av)
 	char *line = NULL;
 	int res;
 
-	while (get_next_line(fd, &line) >= 0)
-		if (line)
-			printf("%s\n", line);
+	while ((res = get_next_line(fd, &line)) >= 0)
+	{
+		write(1, line, strlen(line));
+		if (res)
+			write(1, "\n", 1);
+	}
 	return (0);
 
 }

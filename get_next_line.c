@@ -16,37 +16,33 @@ static int no_newline_in_str(char *str)
 	return (1);
 }
 
-static char *get_content_fron_file(int fd, char *str)
+static int get_content_fron_file(int fd, t_gnl *fd_content)
 {
 	int nb_read;
 	char *s;
 	char *buff;
 
 	buff = ft_strnew(BUFFER_SIZE + 1);
-	nb_read = read(fd, buff, BUFFER_SIZE);
-	if (nb_read < BUFFER_SIZE)
-		eof = 1;
-
-	if (!nb_read)
-		return (str);
-	if (nb_read > 0)
+	if ((nb_read = read(fd, buff, BUFFER_SIZE)) < 0)
+		return (0);
+	if (nb_read)
 	{
-		s = ft_strnew(ft_strlen(str) + nb_read + 1);
-		if (s)
-		{
-			if (str)
-				s =ft_strcat(s, str);
-			s = ft_strncat(s, buff, nb_read);
-			if (no_newline_in_str(s))
-				get_content_fron_file(fd, s);
-			//free(buff);
-			//free(str);
-//			printf("**%s**\n\n\n", s);
-			return (s);
-		}
-		return (NULL);
+		buff[nb_read] = '\0';
+		if (!(s = ft_strnew(ft_strlen(fd_content->content) +	\
+							nb_read + 1)))
+			return (0);
+		if (fd_content->content)
+			s = ft_strcat(s, fd_content->content);
+		s = ft_strcat(s, buff);
+		free(buff);
+		if (fd_content->content)
+			free(fd_content->content);
+		fd_content->content = s;
+		if (no_newline_in_str(fd_content->content))
+			return (get_content_fron_file(fd, fd_content));
+		return (1);
 	}
-	return (NULL);
+	return (1);
 }
 
 char *extract_line(char *str)
@@ -63,7 +59,7 @@ char *extract_line(char *str)
 	return (NULL);
 }
 
-static char *remove_str(char *str)
+static int remove_str(t_gnl *fd_content)
 {
 	int i;
 	int j;
@@ -71,19 +67,29 @@ static char *remove_str(char *str)
 
 	i = 0;
 	j = 0;
-	if (!str)
-		return (NULL);
-	while (str[i] && str[i] != '\n')
+	if (!(fd_content->content))
+		return (0);
+	while (fd_content->content[i] && fd_content->content[i] != '\n')
 		i++;
-	j = ft_strlen(str) - i;
+
+	if (!(fd_content->content[i]))
+	{
+		fd_content->reach_eof = 1;
+		if (fd_content->content)
+			free(fd_content->content);
+		return (1);
+	}
+	j = ft_strlen(fd_content->content) - i;
 	s = ft_strnew(j);
 	if (s)
 	{
-		s = ft_strcat(s, str + i + 1);
-		//	free(str);
-		return (s);
+		s = ft_strcat(s, fd_content->content + i + 1);
+		if (fd_content->content)
+			free(fd_content->content);
+		fd_content->content = s;
+		return (1);
 	}
-	return (NULL);
+	return (0);
 }
 
 static t_gnl	*init_fd_content(int fd, t_gnl *fd_content)
@@ -99,6 +105,7 @@ static t_gnl	*init_fd_content(int fd, t_gnl *fd_content)
 	tmp->fd = fd;
 	tmp->content = NULL;
 	tmp->next = NULL;
+	tmp->reach_eof = 0;
 	return (tmp);
 }
 
@@ -108,7 +115,6 @@ int get_next_line(int fd, char **line)
 
 	if (fd < 0 || BUFFER_SIZE <= 0 || line == NULL)
 		return (-1);
-
 	// CHAINLIST INIT
 	while (fd_content && fd_content->fd != fd && fd_content->next)
 		fd_content = fd_content->next;
@@ -119,33 +125,25 @@ int get_next_line(int fd, char **line)
 		fd_content->next = init_fd_content(fd, fd_content);
 		fd_content = fd_content->next;
 	}
-
-
+	if (fd_content->reach_eof)
+		return (-1);
 
 	// READ
 	if (no_newline_in_str(fd_content->content))
-	{
-		if (!(fd_content->content = get_content_fron_file(fd, fd_content->content)))
+		if (!(get_content_fron_file(fd, fd_content)))
 			return (-1);
-	}
 
 	// EXTRACT
 	*line = extract_line(fd_content->content);
 
 	// REMOVE
-	fd_content->content = remove_str(fd_content->content);
-
+	remove_str(fd_content);
 	// RETURN VALUE
-	if (*line)
+	if (fd_content->reach_eof)
 	{
-		if ((fd_content->content)[0])
-		{
-			fd_content = fd_content->first;
-			return (1);
-		}
 		fd_content = fd_content->first;
 		return (0);
 	}
 	fd_content = fd_content->first;
-	return (-1);
+	return (1);
 }
