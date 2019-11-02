@@ -14,7 +14,7 @@ compile_test () {
 	# $1 ~> name of test c source file
 	# $2 ~> buffer size
 	echo -e "\e[91mBUFFER_SIZE = $2\e[39m"
-	gcc get_next_line.c get_next_line_utils.c $TEST_DIR/src/$1 -D BUFFER_SIZE=$2 -o gnl
+	gcc get_next_line.c get_next_line_utils.c $TEST_DIR/src/$1 -I . -D BUFFER_SIZE=$2 -o gnl
 }
 
 basic_tester () {
@@ -64,6 +64,19 @@ few_lines_test () {
 	few_lines_tester one_char_per_line
 }
 
+return_value_tester () {
+	printf "$1: "
+	./gnl $TEST_DIR/files/$1
+	if [ $? -eq $2 ];
+	then
+		echo -e "\e[32mOK\e[39m"
+	else
+		echo  -e "\e[31mFAIL\e[39m"
+		clean
+		exit
+	fi
+}
+
 #########
 # BASIC #
 #########
@@ -104,6 +117,21 @@ few_lines_test
 # 9999999
 compile_test few_lines.c 9999999
 few_lines_test
+
+################
+# RETURN VALUE #
+################
+print_test_type "Return values"
+# 32
+compile_test return_value.c 32
+return_value_tester empty_file 0
+
+
+
+
+
+
+
 
 # CLEAN
 clean

@@ -7,26 +7,24 @@ static int get_content_fron_file(int fd, t_gnl *fd_content)
 	char *buff;
 
 	buff = ft_strnew(BUFFER_SIZE + 1);
-	if ((nb_read = read(fd, buff, BUFFER_SIZE)) < 0)
-		return (0);
-	if (nb_read)
+	if ((nb_read = read(fd, buff, BUFFER_SIZE)) <= 0)
 	{
-		buff[nb_read] = '\0';
-		if (!(s = ft_strnew(ft_strlen(fd_content->content) + nb_read + 1)))
-			return (0);
-		if (fd_content->content)
-		{
-			s = ft_strcat(s, fd_content->content);
-			free(fd_content->content);
-		}
-		fd_content->content = ft_strcat(s, buff);
 		free(buff);
-		if (no_newline_in_str(fd_content->content))
-			return (get_content_fron_file(fd, fd_content));
-		return (1);
+		return (nb_read);
 	}
+	buff[nb_read] = '\0';
+	if (!(s = ft_strnew(ft_strlen(fd_content->content) + nb_read + 1)))
+		return (0);
+	if (fd_content->content)
+	{
+		s = ft_strcat(s, fd_content->content);
+		free(fd_content->content);
+	}
+	fd_content->content = ft_strcat(s, buff);
 	free(buff);
-	return (0);
+	if (no_newline_in_str(fd_content->content))
+		return (get_content_fron_file(fd, fd_content));
+	return (1);
 }
 
 char *extract_line(char *str)
@@ -110,7 +108,7 @@ int get_next_line(int fd, char **line)
 
 	// READ
 	if (no_newline_in_str(fd_content->content))
-		if (!(get_content_fron_file(fd, fd_content)))
+		if ((get_content_fron_file(fd, fd_content)) == -1)
 			return (-1);
 
 	// IN CASE OF EMPTY FILE
