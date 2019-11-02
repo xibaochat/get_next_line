@@ -1,5 +1,36 @@
 #include "get_next_line.h"
 
+static t_gnl    *init_fd_content(int fd, t_gnl *fd_content)
+{
+	t_gnl    *tmp;
+
+	if (!(tmp = (t_gnl *)malloc(sizeof(t_gnl))))
+		return (NULL);
+	if (!fd_content)
+		tmp->first = tmp;
+	else
+		tmp->first = fd_content->first;
+	tmp->fd = fd;
+	tmp->content = NULL;
+	tmp->next = NULL;
+	tmp->reach_eof = 0;
+	return (tmp);
+}
+
+t_gnl *get_fd_content(int fd, t_gnl *fd_content)
+{
+	while (fd_content && fd_content->fd != fd && fd_content->next)
+		fd_content = fd_content->next;
+	if (!fd_content)
+		fd_content = init_fd_content(fd, NULL);
+	else if (fd_content && !(fd_content->next) && fd_content->fd != fd)
+	{
+		fd_content->next = init_fd_content(fd, fd_content);
+		fd_content = fd_content->next;
+	}
+	return (fd_content);
+}
+
 int no_newline_in_str(char *str)
 {
 	int i;

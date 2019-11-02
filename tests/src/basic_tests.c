@@ -14,8 +14,9 @@ int main(int ac, char **av)
 	char *line = NULL;
 	int res;
 
-	while ((res = get_next_line(fd, &line)) >= 0)
+	while ((res = get_next_line(fd, &line))>= 0)
 	{
+		//	printf("%d\n", res);
 		write(1, line, strlen(line));
 		if (res)
 			write(1, "\n", 1);

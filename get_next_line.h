@@ -20,5 +20,6 @@ char *ft_strncpy(char *dest, char *src, int n);
 char *ft_strnew(int size);
 int no_newline_in_str(char *str);
 int get_next_line(int fd, char **line);
+t_gnl *get_fd_content(int fd, t_gnl *fd_content);
 
 #endif
