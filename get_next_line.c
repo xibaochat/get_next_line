@@ -6,11 +6,24 @@
 /*   By: xinwang <xinwang@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/02 19:10:21 by xinwang           #+#    #+#             */
-/*   Updated: 2019/11/02 19:10:27 by xinwang          ###   ########.fr       */
+/*   Updated: 2019/11/02 22:17:20 by xinwang          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
+
+char*   ft_strncat(char *dest, char *src, unsigned int nb)
+{
+	unsigned int lens;
+	unsigned int i;
+
+	i = 0;
+	lens = ft_strlen(dest);
+	while (src[i] && i < nb)
+		dest[lens++] = src[i++];
+	dest[lens] = '\0';
+	return (dest);
+}
 
 static int get_content_fron_file(int fd, t_gnl *fd_content)
 {
@@ -83,7 +96,7 @@ static int remove_str(t_gnl *fd_content)
 }
 
 
-int get_next_line(int fd, char **line)
+int	get_next_line(int fd, char **line)
 {
 	static t_gnl *fd_content = NULL;
 
@@ -91,7 +104,7 @@ int get_next_line(int fd, char **line)
 		return (-1);
 	fd_content = get_fd_content(fd, fd_content);
 	if (fd_content->reach_eof)
-		return (-1);
+		return (0);
 	if (no_newline_in_str(fd_content->content))
 		if ((get_content_fron_file(fd, fd_content)) == -1)
 			return (-1);
@@ -109,18 +122,4 @@ int get_next_line(int fd, char **line)
 	}
 	fd_content = fd_content->first;
 	return (1);
-}
-
-
-char*   ft_strncat(char *dest, char *src, unsigned int nb)
-{
-	unsigned int lens;
-	unsigned int i;
-
-	i = 0;
-	lens = ft_strlen(dest);
-	while (src[i] && i < nb)
-		dest[lens++] = src[i++];
-	dest[lens] = '\0';
-	return (dest);
 }

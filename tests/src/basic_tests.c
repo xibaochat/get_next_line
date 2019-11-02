@@ -12,11 +12,13 @@ int main(int ac, char **av)
 	char *str = NULL;
 	int fd = open(av[1], O_RDONLY);
 	char *line = NULL;
-	int res;
+	int res, old_res;
 
+	old_res = 42;
 	while ((res = get_next_line(fd, &line))>= 0)
 	{
-		//	printf("%d\n", res);
+		if (!res && !old_res)
+			return (0);
 		write(1, line, strlen(line));
 		if (res)
 			write(1, "\n", 1);
@@ -25,6 +27,7 @@ int main(int ac, char **av)
 			free(line);
 			line = NULL;
 		}
+		old_res = res;
 	}
 	return (0);
 

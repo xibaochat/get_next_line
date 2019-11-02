@@ -6,7 +6,7 @@
 /*   By: xinwang <xinwang@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/02 19:10:32 by xinwang           #+#    #+#             */
-/*   Updated: 2019/11/02 19:10:34 by xinwang          ###   ########.fr       */
+/*   Updated: 2019/11/02 20:06:45 by xinwang          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ static t_gnl    *init_fd_content(int fd, t_gnl *fd_content)
 	return (tmp);
 }
 
-t_gnl *get_fd_content(int fd, t_gnl *fd_content)
+t_gnl			*get_fd_content(int fd, t_gnl *fd_content)
 {
 	while (fd_content && fd_content->fd != fd && fd_content->next)
 		fd_content = fd_content->next;
@@ -43,9 +43,9 @@ t_gnl *get_fd_content(int fd, t_gnl *fd_content)
 	return (fd_content);
 }
 
-int no_newline_in_str(char *str)
+int				no_newline_in_str(char *str)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	if (!str)
@@ -59,10 +59,10 @@ int no_newline_in_str(char *str)
 	return (1);
 }
 
-char *ft_strnew(int size)
+char			*ft_strnew(int size)
 {
-	char *ptr;
-	int i;
+	char	*ptr;
+	int		i;
 
 	if (!(ptr = (char *)malloc(size)))
 		return (NULL);
@@ -72,10 +72,10 @@ char *ft_strnew(int size)
 	return (ptr);
 }
 
-int		ft_strlen(char *str)
+int				ft_strlen(char *str)
 {
-	int  i;
-	int  lens;
+	int	i;
+	int	lens;
 
 	i = -1;
 	lens = 0;
@@ -83,17 +83,4 @@ int		ft_strlen(char *str)
 		while (str[++i])
 			lens++;
 	return (lens);
-}
-
-char*	ft_strncat(char *dest, char *src, unsigned int nb)
-{
-	unsigned int lens;
-	unsigned int i;
-
-	i = 0;
-	lens = ft_strlen(dest);
-	while (src[i] && i < nb)
-		dest[lens++] = src[i++];
-	dest[lens] = '\0';
-	return (dest);
 }
