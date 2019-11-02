@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   get_next_line_utils.c                              :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: xinwang <xinwang@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2019/11/02 19:10:32 by xinwang           #+#    #+#             */
+/*   Updated: 2019/11/02 19:10:34 by xinwang          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "get_next_line.h"
 
 static t_gnl    *init_fd_content(int fd, t_gnl *fd_content)
@@ -73,29 +85,15 @@ int		ft_strlen(char *str)
 	return (lens);
 }
 
-char	*ft_strncpy(char *dest, char *src, int n)
+char*	ft_strncat(char *dest, char *src, unsigned int nb)
 {
-	int i;
+	unsigned int lens;
+	unsigned int i;
 
 	i = 0;
-	while  (i < n && src[i])
-	{
-		dest[i] = src[i];
-		i++;
-	}
-	dest[i] = '\0';
-	return (dest);
-}
-
-char	*ft_strcat(char *dest, char *src)
-{
-	unsigned int	i;
-	unsigned int	j;
-
-	i = 0;
-	j = ft_strlen(dest);
-	while (src[i])
-		dest[j++] = src[i++];
-	dest[j] = '\0';
+	lens = ft_strlen(dest);
+	while (src[i] && i < nb)
+		dest[lens++] = src[i++];
+	dest[lens] = '\0';
 	return (dest);
 }

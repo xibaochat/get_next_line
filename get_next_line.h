@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   get_next_line.h                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: xinwang <xinwang@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2019/11/02 19:10:44 by xinwang           #+#    #+#             */
+/*   Updated: 2019/11/02 19:10:53 by xinwang          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef GET_NEXT_LINE_H
 # define GET_NEXT_LINE_H
 
@@ -21,5 +33,6 @@ char *ft_strnew(int size);
 int no_newline_in_str(char *str);
 int get_next_line(int fd, char **line);
 t_gnl *get_fd_content(int fd, t_gnl *fd_content);
+char*   ft_strncat(char *dest, char *src, unsigned int nb);
 
 #endif
