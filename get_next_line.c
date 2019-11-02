@@ -6,13 +6,13 @@
 /*   By: xinwang <xinwang@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/02 19:10:21 by xinwang           #+#    #+#             */
-/*   Updated: 2019/11/02 22:17:20 by xinwang          ###   ########.fr       */
+/*   Updated: 2019/11/02 22:24:53 by xinwang          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-char*   ft_strncat(char *dest, char *src, unsigned int nb)
+char   *ft_strncat(char *dest, char *src, unsigned int nb)
 {
 	unsigned int lens;
 	unsigned int i;
@@ -61,12 +61,12 @@ char *extract_line(char *str)
 	while (str[i] && str[i] != '\n')
 		i++;
 	s = ft_strnew(i + 1);
-	if(s)
+	if (s)
 		return (ft_strncat(s, str, i));
 	return (NULL);
 }
 
-static int remove_str(t_gnl *fd_content)
+static int remove_str(t_gnl *fdC)
 {
 	int i;
 	int j;
@@ -74,26 +74,27 @@ static int remove_str(t_gnl *fd_content)
 
 	i = 0;
 	j = 0;
-	while (fd_content->content[i] && fd_content->content[i] != '\n')
+	while (fdC->content[i] && fdC->content[i] != '\n')
 		i++;
-	if (!(fd_content->content[i]))
+	if (!(fdC->content[i]))
 	{
-		fd_content->reach_eof = 1;
-		if (fd_content->content)
-			free(fd_content->content);
+		fdC->reach_eof = 1;
+		if (fdC->content)
+			free(fdC->content);
 		return (1);
 	}
-	j = ft_strlen(fd_content->content) - i;
+	j = ft_strlen(fdC->content) - i;
 	if ((s = ft_strnew(j)))
 	{
-		s = ft_strncat(s, fd_content->content + i + 1, ft_strlen(fd_content->content) + i + 1);
-		if (fd_content->content)
-			free(fd_content->content);
-		fd_content->content = s;
+		s = ft_strncat(s, fdC->content + (++i), ft_strlen(fdC->content) + i);
+		if (fdC->content)
+			free(fdC->content);
+		fdC->content = s;
 		return (1);
 	}
 	return (0);
 }
+
 
 
 int	get_next_line(int fd, char **line)
