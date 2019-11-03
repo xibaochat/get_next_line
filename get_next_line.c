@@ -6,7 +6,7 @@
 /*   By: xinwang <xinwang@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/02 19:10:21 by xinwang           #+#    #+#             */
-/*   Updated: 2019/11/04 00:15:58 by xinwang          ###   ########.fr       */
+/*   Updated: 2019/11/04 00:56:15 by xinwang          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,16 +101,26 @@ int	get_next_line(int fd, char **line)
 	static t_gnl *fd_content = NULL;
 
 	if (fd < 0 || BUFFER_SIZE <= 0 || line == NULL)
+	{
+		fd_content = fd_content->first;
 		return (-1);
+	}
 	fd_content = get_fd_content(fd, fd_content);
 	if (fd_content->reach_eof)
+	{
+		fd_content = fd_content->first;
 		return (0);
+	}
 	if (no_newline_in_str(fd_content->content))
 		if ((get_content_fron_file(fd, fd_content)) == -1)
+		{
+			fd_content = fd_content->first;
 			return (-1);
+		}
 	if (!fd_content->content)
 	{
 		*line = ft_strnew(1);
+		fd_content = fd_content->first;
 		return (0);
 	}
 	*line = extract_line(fd_content->content);
@@ -124,7 +134,7 @@ int	get_next_line(int fd, char **line)
 	return (1);
 }
 
-#include <stdio.h>
+/*#include <stdio.h>
 int main(int ac, char **av)
 {
 	(void)ac;
@@ -146,5 +156,4 @@ int main(int ac, char **av)
 		}
 	}
 	return (0);
-
-}
+}*/
