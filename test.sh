@@ -2,6 +2,9 @@
 
 TEST_DIR=./tests/
 
+##########
+# COMMON #
+##########
 clean () {
 	rm -rf gnl.res gnl expected.res
 }
@@ -17,6 +20,9 @@ compile_test () {
 	gcc get_next_line.c get_next_line_utils.c $TEST_DIR/src/$1 -I . -D BUFFER_SIZE=$2 -o gnl
 }
 
+#########
+# BASIC #
+#########
 basic_tester () {
 	printf "$1: "
 	./gnl $TEST_DIR/files/$1 > gnl.res
@@ -42,6 +48,28 @@ basic_test () {
 	basic_tester one_huge_line
 }
 
+print_test_type "BASICS"
+
+# 32
+compile_test basic_tests.c 32
+basic_test
+# 42
+compile_test basic_tests.c 42
+basic_test
+# 1
+compile_test basic_tests.c 1
+basic_test
+# 10000
+compile_test basic_tests.c 10000
+basic_test
+# 9999999
+compile_test basic_tests.c 9999999
+basic_test
+
+#############
+# FEW LINES #
+#############
+
 few_lines_tester () {
 	printf "$1: "
 	./gnl $TEST_DIR/files/$1 > gnl.res
@@ -64,43 +92,6 @@ few_lines_test () {
 	few_lines_tester one_char_per_line
 }
 
-return_value_tester () {
-	printf "$1: "
-	./gnl $TEST_DIR/files/$1
-	if [ $? -eq $2 ];
-	then
-		echo -e "\e[32mOK\e[39m"
-	else
-		echo  -e "\e[31mFAIL\e[39m"
-		clean
-		exit
-	fi
-}
-
-#########
-# BASIC #
-#########
-print_test_type "BASICS"
-
-# 32
-compile_test basic_tests.c 32
-basic_test
-# 42
-compile_test basic_tests.c 42
-basic_test
-# 1
-compile_test basic_tests.c 1
-basic_test
-# 10000
-compile_test basic_tests.c 10000
-basic_test
-# 9999999
-compile_test basic_tests.c 9999999
-basic_test
-
-#############
-# FEW LINES #
-#############
 print_test_type "Few Lines"
 # 32
 compile_test few_lines.c 32
@@ -121,17 +112,95 @@ few_lines_test
 ################
 # RETURN VALUE #
 ################
+return_value_tester () {
+	printf "$1: "
+	./gnl $TEST_DIR/files/$1
+	if [ $? -eq $2 ];
+	then
+		echo -e "\e[32mOK\e[39m"
+	else
+		echo  -e "\e[31mFAIL\e[39m"
+		clean
+		exit
+	fi
+}
+
 print_test_type "Return values"
 # 32
 compile_test return_value.c 32
 return_value_tester empty_file 0
 
+# 42
+compile_test return_value.c 42
+return_value_tester empty_file 0
 
+# 1
+compile_test return_value.c 1
+return_value_tester empty_file 0
 
+# 1000
+compile_test return_value.c 1000
+return_value_tester empty_file 0
 
+# 9999999
+compile_test return_value.c 9999999
+return_value_tester empty_file 0
+
+#########
+# STDIN #
+#########
+stdin_tester () {
+	printf "$1: "
+	echo $2 > expected.res
+	echo $2 | ./gnl > gnl.res
+	diff expected.res gnl.res
+	if [[ $? -eq 0 ]];
+	then
+		echo -e "\e[32mOK\e[39m"
+	else
+		echo  -e "\e[31mFAIL\e[39m"
+		clean
+		exit
+	fi
+}
+
+stdin_test () {
+	stdin_tester "test00" "XibaoHatesMeishanu"
+	stdin_tester "test01" "A\nB\nC"
+	stdin_tester "test02" ""
+	stdin_tester "test03" "\n\n\n\n\n"
+	stdin_tester "test04" "\n"
+	stdin_tester "test05" `cat $TEST_DIR/files/medium_file`
+	stdin_tester "test06" `cat $TEST_DIR/files/empty_file`
+	stdin_tester "test07" `cat $TEST_DIR/files/small_test`
+	stdin_tester "test08" `cat $TEST_DIR/files/one_huge_line`
+	stdin_tester "test09" `cat $TEST_DIR/files/one_char`
+}
+
+print_test_type "Stdin"
+
+# 32
+compile_test stdin.c 32
+stdin_test
+
+# 42
+compile_test stdin.c 42
+stdin_test
+
+# 1
+compile_test stdin.c 1
+stdin_test
+
+# 1000
+compile_test stdin.c 1000
+stdin_test
+
+# 9999999
+compile_test stdin.c 999999
+stdin_test
 
 
 
 
 # CLEAN
-clean
+#clean
