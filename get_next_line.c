@@ -6,7 +6,7 @@
 /*   By: xinwang <xinwang@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/02 19:10:21 by xinwang           #+#    #+#             */
-/*   Updated: 2019/11/02 22:24:53 by xinwang          ###   ########.fr       */
+/*   Updated: 2019/11/04 00:15:58 by xinwang          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,4 +122,29 @@ int	get_next_line(int fd, char **line)
 	}
 	fd_content = fd_content->first;
 	return (1);
+}
+
+#include <stdio.h>
+int main(int ac, char **av)
+{
+	(void)ac;
+	char *str = NULL;
+	int fd;
+	int i = 0;
+	while (++i < ac)
+	{
+		fd= open(av[i], O_RDONLY);
+		printf("fd is %d\n", fd);
+		char *line = NULL;
+		int res;
+		while((res = get_next_line(fd, &line)) >= 0)
+		{
+			if (line)
+				printf("%d\n%s\n", res, line);
+			//	if( !res)
+			//	return (0);
+		}
+	}
+	return (0);
+
 }
