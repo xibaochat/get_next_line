@@ -31,7 +31,8 @@ static int get_content_fron_file(int fd, t_gnl *fd_content)
 	char *s;
 	char *buff;
 
-	buff = ft_strnew(BUFFER_SIZE + 1);
+	if (!(buff = ft_strnew(BUFFER_SIZE + 1)))
+		return (-1);
 	if ((nb_read = read(fd, buff, BUFFER_SIZE)) <= 0)
 	{
 		free(buff);
@@ -39,7 +40,7 @@ static int get_content_fron_file(int fd, t_gnl *fd_content)
 	}
 	buff[nb_read] = '\0';
 	if (!(s = ft_strnew(ft_strlen(fd_content->content) + nb_read + 1)))
-		return (0);
+		return (-1);
 	if (fd_content->content)
 	{
 		s = ft_strncat(s, fd_content->content, ft_strlen(fd_content->content));
@@ -86,7 +87,7 @@ static int remove_str(t_gnl *fdC)
 	j = ft_strlen(fdC->content) - i;
 	if ((s = ft_strnew(j)))
 	{
-		s = ft_strncat(s, fdC->content + (++i), ft_strlen(fdC->content) + i);
+		s = ft_strncat(s, fdC->content + (++i), j - 1);
 		if (fdC->content)
 			free(fdC->content);
 		fdC->content = s;
@@ -94,8 +95,6 @@ static int remove_str(t_gnl *fdC)
 	}
 	return (0);
 }
-
-
 
 int	get_next_line(int fd, char **line)
 {
