@@ -6,7 +6,7 @@
 /*   By: xinwang <xinwang@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/02 19:10:21 by xinwang           #+#    #+#             */
-/*   Updated: 2019/11/04 00:56:15 by xinwang          ###   ########.fr       */
+/*   Updated: 2019/11/04 03:38:18 by xinwang          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,10 +101,7 @@ int	get_next_line(int fd, char **line)
 	static t_gnl *fd_content = NULL;
 
 	if (fd < 0 || BUFFER_SIZE <= 0 || line == NULL)
-	{
-		fd_content = fd_content->first;
 		return (-1);
-	}
 	fd_content = get_fd_content(fd, fd_content);
 	if (fd_content->reach_eof)
 	{
