@@ -6,49 +6,11 @@
 /*   By: xinwang <xinwang@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/02 19:10:21 by xinwang           #+#    #+#             */
-/*   Updated: 2019/11/07 14:42:17 by xinwang          ###   ########.fr       */
+/*   Updated: 2019/11/04 03:38:18 by xinwang          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
-
-void	ft_del(t_gnl **ptr)
-{
-	t_gnl	*tmp;
-	t_gnl	*prev;
-	t_gnl	*after;
-
-	prev = NULL;
-	if (*ptr == (*ptr)->first)
-	{
-		tmp = (*ptr)->next;
-		free((*ptr)->content);
-		(*ptr)->next = NULL;
-		free(*ptr);
-		*ptr = tmp;
-	}
-	else
-	{
-		tmp = (*ptr)->first;
-		while (tmp)
-		{
-			if (tmp == *ptr)
-			{
-				if (prev)
-					prev->next = (*ptr)->next;
-				after = (*ptr)->next;
-				free((*ptr)->content);
-				free(*ptr);
-				tmp = after;
-			}
-			else
-			{
-				prev = tmp;
-				tmp = tmp->next;
-			}
-		}
-	}
-}
 
 char	*ft_strncat(char *dest, char *src, unsigned int nb)
 {
@@ -63,7 +25,7 @@ char	*ft_strncat(char *dest, char *src, unsigned int nb)
 	return (dest);
 }
 
-/*char	*ft_strnew(int size)
+char	*ft_strnew(int size)
 {
 	char*ptr;
 	int i;
@@ -74,7 +36,7 @@ char	*ft_strncat(char *dest, char *src, unsigned int nb)
 	while (i < size)
 		ptr[i++] = 0;
 	return (ptr);
-	}*/
+}
 
 int		ft_strlen(char *str)
 {
