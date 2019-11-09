@@ -6,11 +6,11 @@
 /*   By: xinwang <xinwang@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/02 19:10:21 by xinwang           #+#    #+#             */
-/*   Updated: 2019/11/04 03:38:18 by xinwang          ###   ########.fr       */
+/*   Updated: 2019/11/09 02:26:16 by xinwang          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "get_next_line.h"
+#include "get_next_line_bonus.h"
 
 char	*ft_strncat(char *dest, char *src, unsigned int nb)
 {
@@ -51,36 +51,42 @@ int		ft_strlen(char *str)
 	return (lens);
 }
 
-t_gnl	*init_fd_content(int fd, t_gnl *fd_content)
+int		ft_lstdel(t_gnl **begin_list, t_gnl *this)
 {
 	t_gnl *tmp;
 
-	tmp = NULL;
+	free(this->content);
+	if (*begin_list == this)
+		*begin_list = this->next;
+	else
+	{
+		tmp = *begin_list;
+		while (tmp && tmp->next && (tmp->next != this))
+			tmp = tmp->next;
+		tmp->next = this->next;
+	}
+	free(this);
+	return (-1);
+}
+
+t_gnl	*get_fd(int fd, t_gnl **begin_list)
+{
+	t_gnl	*current;
+	t_gnl	*tmp;
+
+	current = *begin_list;
+	while (current && current->fd != fd && current->next)
+		current = current->next;
+	if (current && current->fd == fd)
+		return (current);
 	if (!(tmp = (t_gnl *)malloc(sizeof(t_gnl))))
 		return (NULL);
 	tmp->fd = fd;
-	tmp->content = NULL;
-	if (!fd_content)
-		tmp->first = tmp;
-	else
-		tmp->first = fd_content->first;
+	tmp->content = ft_strnew(1);
 	tmp->next = NULL;
-	return (tmp);
-}
-
-t_gnl	*get_fd(int fd, t_gnl *fd_content)
-{
-	if (!fd_content)
-		return (init_fd_content(fd, fd_content));
-	while (fd_content && fd_content->fd != fd && fd_content->next)
-	{
-		fd_content = fd_content->next;
-	}
-	if (fd_content->fd == fd)
-		return (fd_content);
+	if (current)
+		current->next = tmp;
 	else
-	{
-		fd_content->next = init_fd_content(fd, fd_content);
-		return (fd_content->next);
-	}
+		*begin_list = tmp;
+	return (tmp);
 }
