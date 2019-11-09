@@ -6,7 +6,7 @@
 /*   By: xinwang <xinwang@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/02 19:10:21 by xinwang           #+#    #+#             */
-/*   Updated: 2019/11/09 02:31:44 by xinwang          ###   ########.fr       */
+/*   Updated: 2019/11/09 02:40:25 by xinwang          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,75 +105,13 @@ int					get_next_line(int fd, char **line)
 	if (fd < 0 || !line || BUFFER_SIZE <= 0)
 		return (-1);
 	current = get_fd(fd, &begin_list);
-//	if (fd == 4 && current->content)
-//		printf("++%d++ %d ++%s++\n", begin_list->fd, fd, current->content);
 	if (no_newline_in_str(current->content))
 	{
 		if (get_content_from_file(fd, current) == -1)
 			return (ft_lstdel(&begin_list, current));
 	}
 	res = manage_str(&current, line);
-//	if (fd == 4)
-//		printf("==%d== %d --%s-- &&%s&&\n", begin_list->fd, res, current->content, *line);
 	if (res != 1)
 		ft_lstdel(&begin_list, current);
 	return (res);
-}
-
-/*
-#include <stdio.h>
-int main(int ac, char **av)
-{
-	(void)ac;
-
-	int fd = open(av[1], O_RDONLY);
-	char *line = NULL;
-	int res = get_next_line(fd, &line);
-	printf("%d %s\n", res, line);
-	return 0;
-}*/
-
-int main(int ac, char **av)
-{
-	(void)ac;
-	int fd0 = open(av[1], O_RDONLY);
-	int fd1 = open(av[2], O_RDONLY);
-	int fdo0 = open("output_f0", O_WRONLY|O_CREAT, 0644);
-	int fdo1 = open("output_f1", O_WRONLY|O_CREAT, 0644);
-	int res0 = 1;
-	int res1 = 1;
-	char *line0 = NULL;
-	char *line1 = NULL;
-//	printf("%d | %d\n", fd0, fd1);
-
-	while ((res0 > 0) || (res1 > 0))
-	{
-		if (res0)
-		{
-			res0 = get_next_line(fd0, &line0);
-//			printf("-------------------------- END OF %s\n", av[1]);
-		}
-		if (res1)
-		{
-			res1 = get_next_line(fd1, &line1);
-//			printf("-------------------------- END OF %s\n", av[2]);
-		}
-		if (line0)
-		{
-			write(fdo0, line0, ft_strlen(line0));
-			if (res0)
-				write(fdo0, "\n", 1);
-			free(line0);
-			line0 = NULL;
-		}
-		if (line1)
-		{
-			write(fdo1, line1, ft_strlen(line1));
-			if (res1)
-				write(fdo1, "\n", 1);
-			free(line1);
-			line1 = NULL;
-		}
-	}
-	return (0);
 }
