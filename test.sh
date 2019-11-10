@@ -1,6 +1,18 @@
 #!/usr/bin/bash
 
 TEST_DIR=./tests/
+
+
+if [ $# -eq 0 ]
+then
+	echo -e "\033[31mNo arguments supplied"
+	echo -e "Usage: ./a.out BONUS_TEST"
+	echo -e "With BONUS_TEST:"
+	echo -e "\t0 ~> test basics only"
+	echo -e "\t1 ~> test bonus only"
+	exit
+fi
+
 TEST_BONUS=$1
 
 ##########
@@ -11,13 +23,13 @@ clean () {
 }
 
 print_test_type () {
-	echo -e "\e[94m==== \e[45m$1\e[49m \e[49m====\e[39m"
+	echo -e "\033[94m==== \033[45m$1\033[49m \033[49m====\033[39m"
 }
 
 compile_test () {
 	# $1 ~> name of test c source file
 	# $2 ~> buffer size
-	echo -e "\e[4m\e[93mBUFFER_SIZE = $2\e[39m\e[0m"
+	echo -e "\033[4m\033[93mBUFFER_SIZE = $2\033[39m\033[0m"
 	if [ $TEST_BONUS -eq 1 ];
 	then
 		gcc -Wall -Wextra -Werror get_next_line_bonus.c get_next_line_utils_bonus.c $TEST_DIR/src/$1 -I . -D BUFFER_SIZE=$2 -o gnl
@@ -31,13 +43,13 @@ compile_test () {
 #########
 basic_tester () {
 	printf "$1: "
-	./gnl $TEST_DIR/files/$1 2>&- > gnl.res
+	./gnl $TEST_DIR/files/$1  > gnl.res
 	diff $TEST_DIR/files/$1 gnl.res 2>/dev/null > /dev/null
 	if [[ $? -eq 0 ]];
 	then
-		echo -e "\e[32mOK\e[39m"
+		echo -e "\033[32mOK\033[39m"
 	else
-		echo  -e "\e[31mFAIL\e[39m"
+		echo  -e "\033[31mFAIL\033[39m"
 		clean
 		exit
 	fi
@@ -78,14 +90,14 @@ basic_test
 
 few_lines_tester () {
 	printf "$1: "
-	./gnl $TEST_DIR/files/$1 2>&- > gnl.res
+	./gnl $TEST_DIR/files/$1  > gnl.res
 	head -n 3 $TEST_DIR/files/$1 > expected.res
 	diff gnl.res expected.res 2>/dev/null > /dev/null
 	if [[ $? -eq 0 ]];
 	then
-		echo -e "\e[32mOK\e[39m"
+		echo -e "\033[32mOK\033[39m"
 	else
-		echo  -e "\e[31mFAIL\e[39m"
+		echo  -e "\033[31mFAIL\033[39m"
 		clean
 		exit
 	fi
@@ -123,9 +135,9 @@ return_value_tester () {
 	./gnl $TEST_DIR/files/$1
 	if [ $? -eq $2 ];
 	then
-		echo -e "\e[32mOK\e[39m"
+		echo -e "\033[32mOK\033[39m"
 	else
-		echo  -e "\e[31mFAIL\e[39m"
+		echo  -e "\033[31mFAIL\033[39m"
 		clean
 		exit
 	fi
@@ -158,13 +170,13 @@ return_value_tester empty_file 0
 stdin_tester () {
 	printf "$1: "
 	echo $2 > expected.res
-	echo $2 | ./gnl 2>&- > gnl.res
+	echo $2 | ./gnl  > gnl.res
 	diff expected.res gnl.res
 	if [[ $? -eq 0 ]];
 	then
-		echo -e "\e[32mOK\e[39m"
+		echo -e "\033[32mOK\033[39m"
 	else
-		echo  -e "\e[31mFAIL\e[39m"
+		echo  -e "\033[31mFAIL\033[39m"
 		clean
 		exit
 	fi
@@ -215,13 +227,13 @@ stdin_test
 multi_fd_test()
 {
 	printf "$1 - $2: "
-	./gnl $TEST_DIR/files/$1 $TEST_DIR/files/$2 2>&-
+	./gnl $TEST_DIR/files/$1 $TEST_DIR/files/$2
 	diff output_f0 $TEST_DIR/files/$1 2>/dev/null > /dev/null
 	if [[ $? -eq 0 ]];
 	then
-		printf "\e[32mOK \e[39m"
+		printf "\033[32mOK \033[39m"
 	else
-		printf "\e[31mFAIL\e[39m"
+		printf "\033[31mFAIL\033[39m"
 		clean
 		exit
 	fi
@@ -229,9 +241,9 @@ multi_fd_test()
 	diff output_f1 $TEST_DIR/files/$2 2>/dev/null > /dev/null
 	if [[ $? -eq 0 ]];
 	then
-		echo -e "\e[32mOK\e[39m"
+		echo -e "\033[32mOK\033[39m"
 	else
-		echo  -e "\e[31mFAIL\e[39m"
+		echo  -e "\033[31mFAIL\033[39m"
 		clean
 		exit
 	fi
@@ -276,7 +288,7 @@ then
 	compile_test multi_fd.c 1000
 	multi_fd_tester
 
-	echo -e "\e[32m\n\n\tNice work cute cat!\e[39m\n\n"
+	echo -e "\033[32m\n\n\tNice work cute cat!\033[39m\n\n"
 fi
 
 
