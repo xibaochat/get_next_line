@@ -36,3 +36,6 @@ bash test.sh 1
 ```
 
 ![gif](https://github.com/xibaochat/get_next_line/blob/master/gnl.gif)
+
+## Subject
+[en_get_next_line.pdf](https://github.com/xibaochat/get_next_line/blob/master/01_get_next_line_en.pdf)
